@@ -2,6 +2,7 @@
 
 let mix = require('laravel-mix');
 require('laravel-mix-purgecss');
+const tailwindcss = require('tailwindcss');
 
 // Config
 
@@ -16,26 +17,14 @@ mix.webpackConfig({
 mix.
     sass('assets/styles/style.scss', 'style.css')
     .options({
-        processCssUrls: false
+        processCssUrls: false,
+        postCss: [tailwindcss('./tailwind.config.js')],
+
     })
-    .purgeCss({
-        content: [
-            '*.php',
-        ],
-        safelist: {
-            standard: [
-                /^text-/,
-                /^bg-/,
-                /^visible-/,
-                /^hidden-/,
-                /^btn/,
-            ]
-        }
-    });
+
 
 // JS
-
 mix
-    .js([          
+    .js([
         'assets/scripts/scripts.js'
     ], 'js/scripts.min.js');
