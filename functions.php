@@ -1,13 +1,6 @@
 <?php
 
 /**
- * Custom functions / External files
- */
-
-require_once 'includes/custom-functions.php';
-
-
-/**
  * Add support for useful stuff
  */
 
@@ -355,3 +348,63 @@ function add_menu_link_class ( $atts, $item, $args )
     return $atts;
 }
 add_filter( 'nav_menu_link_attributes', 'add_menu_link_class', 1, 3 );
+
+// Disable Gutenberg on the back end.
+add_filter( 'use_block_editor_for_post', '__return_false' );
+add_filter( 'use_block_editor_for_post_type', '__return_false', 10 );
+
+// Disable Gutenberg for widgets.
+add_filter( 'use_widgets_block_editor', '__return_false' );
+
+add_action( 'wp_enqueue_scripts', function ()
+{
+    // Remove CSS on the front end.
+    wp_dequeue_style( 'wp-block-library' );
+
+    // Remove Gutenberg theme.
+    wp_dequeue_style( 'wp-block-library-theme' );
+
+    // Remove inline global CSS on the front end.
+    wp_dequeue_style( 'global-styles' );
+}, 100 );
+
+
+
+/**
+ * If ?s matches category/band show only their posts
+ *
+ * @param object WP_Query $query
+ *
+ * @return void
+ */
+function akordi_add_category_to_search_results ( $query )
+{
+    if ( ! is_admin() && $query->is_main_query() )
+    {
+        if ( $query->is_search )
+        {
+            $cat_id = get_cat_ID( get_search_query() );
+
+            if ( ! empty( $cat_id ) )
+            {
+                $query->set( 's', '' );
+                $query->set( 'cat', $cat_id );
+            }
+        }
+    }
+}
+add_action( 'pre_get_posts', 'akordi_add_category_to_search_results' );
+
+function akordi_views ( $id )
+{
+    if ( user_can( get_current_user_id(), 'administrator' ) )
+    {
+        if ( function_exists( 'wpp_get_views' ) )
+        {
+            wpp_get_views( $id );
+
+        }
+    }
+}
+
+require get_template_directory() . '/includes/template-tags.php';

@@ -1,0 +1,11 @@
+body {
+	@apply dark:text-gray-100 text-gray-900 dark:bg-gray-900 bg-gray-100;
+}
+
+main {
+	@apply container max-w-screen-xl mx-auto px-4 py-14;
+}
+
+.screen-reader-text {
+	display: none;
+}

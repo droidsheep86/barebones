@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 
-<main class="main dark:bg-gray-800 bg-gray-100" role="main">
-	<div class="container max-w-6xl mx-auto">
+<main class="page-main" role="main">
+	<div class="container max-w-screen-xl mx-auto px-4">
 
 		<?php while ( have_posts() ) :
 			the_post(); ?>

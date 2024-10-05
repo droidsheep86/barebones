@@ -1,107 +1,68 @@
 /* AKORD UCILNICA */
 
-.chords-library {
-	display: flex;
-	flex-flow: row wrap;
-	margin-bottom: 60px;
-	border-bottom: 1px solid #666;
-
-	@media only screen and (max-width: 768px) {
-		justify-content: space-around;
-	}
-}
-
-.chordname {
-	font-size: 18px;
-	font-weight: bold;
-	text-align: center;
-	position: relative;
-	margin-left: 30px;
-	margin-bottom: 30px;
-}
-
-.diagram-wrap {
-	float: left;
-	margin-bottom: 15px;
-	margin-right: 15px;
-}
-
-.diagram {
-	.row {
-		clear: both;
-
-		&.first .fret {
-			border-top: 1px solid #111;
-		}
-
-		&.last .fret {
-			border: 0;
-		}
+@layer components {
+	.chords-library {
+		@apply flex flex-wrap py-10 border-b border-solid border-gray-600 dark:border-gray-500;
 	}
 
-	.cell {
-		float: left;
-		position: relative;
-		width: 50px;
-		height: 21px;
+	.chordname {
+		@apply text-lg font-bold text-center relative ml-8 mb-8 dark:text-white text-gray-900;
+	}
 
-		&.fret {
-			border: 1px solid #111;
-			border-top: 0;
+	.diagram-wrap {
+		@apply float-left mb-10 mr-20;
+	}
 
-			&:not(:last-of-type) {
-				border-right: 0;
+	.diagram {
+		.row {
+			@apply clear-both;
+
+
+			&.first .fret {
+				@apply border-t dark:border-gray-500 border-gray-900;
+			}
+
+			&.last .fret {
+				@apply border-0;
 			}
 		}
 
-		&.label {
-			width: 15px;
-		}
-
-		.note {
-			font-size: 12px;
-			position: absolute;
-			z-index: 2;
-			width: 18px;
-			height: 18px;
-			left: 50%;
-			margin-left: -13px;
-			margin-top: -10px;
-			color: #fff;
-			background-color: #27ae60;
-			text-align: center;
-			border-radius: 50%;
-
-			&.stringname {
-				background: none;
-				color: #111;
-			}
-
-			&.openstring {
-				background: none;
-				color: #27ae60;
-				font-weight: bold;
-			}
-
-			&.forbidenstring {
-				background: none;
-				color: #b40f0f;
-				font-weight: bold;
-			}
-		}
-	}
-
-	.fret-number {
-		margin-left: 40px;
-		background-color: #111;
-		color: #fff;
-		padding: 2px 6px;
-		font-size: 12px;
-	}
-
-	@media only screen and (max-width: 767px) {
 		.cell {
-			width: 70px;
+			@apply float-left relative w-12 h-6;
+
+			&.fret {
+				@apply border dark:border-gray-500 border-gray-900 border-t-0;
+
+				&:not(:last-of-type) {
+					@apply border-r-0;
+				}
+			}
+
+			&.label {
+				@apply w-4;
+			}
+
+			.note {
+				@apply text-xs absolute z-10 w-5 h-5 left-1/2 -ml-3 -mt-2 text-white bg-green-500 text-center rounded-xl font-semibold flex items-center justify-center;
+
+				&.stringname {
+					@apply bg-transparent dark:text-white text-gray-900;
+
+				}
+
+				&.openstring {
+					@apply bg-transparent text-green-600 text-sm;
+				}
+
+				&.forbidenstring {
+					@apply bg-transparent text-red-600 text-sm;
+				}
+			}
+		}
+
+		.fret-number {
+			@apply w-12 text-center block ml-8 mt-8 dark:bg-gray-500 bg-gray-900 text-white px-2 py-2 text-xs;
+
 		}
 	}
 }

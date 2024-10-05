@@ -1,6 +1,6 @@
-<footer class="footer dark:bg-gray-900 bg-gray-400" role="contentinfo">
+<footer class="footer dark:bg-gray-700 bg-white px-4 py-14" role="contentinfo">
 
-	<div class="container max-w-6xl mx-auto">
+	<div class="container max-w-screen-xl mx-auto">
 		<div class="row">
 			<div class="col col--lg-3 col--md-3 col--sm-12 col--xs-12">
 				<p class="footer__copyright">&copy; <?php echo get_bloginfo( 'name' ); ?> <?php echo date( 'Y' ); ?></p>

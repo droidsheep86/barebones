@@ -11,8 +11,15 @@ Text Domain: barebones
 */
 
 @charset 'UTF-8';
-@import 'pages/chords-library';
 
+@import 'general/general';
+
+@import 'header/navigation';
+
+@import 'archive/table';
+@import 'archive/pagination';
+
+@import 'pages/chords-library';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
