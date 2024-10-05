@@ -4,6 +4,7 @@ module.exports = {
     './single.php',
     './index.php',
     './page.php',
+    './footer.php',
     './functions.php',
     './template-parts/**/*.php',
     './assets/js/**/*.js',
@@ -31,4 +32,5 @@ module.exports = {
   plugins: [
     // require('@tailwindcss/typography'),
   ],
+  darkMode: 'class',
 }

@@ -1,23 +1,24 @@
 <?php get_header(); ?>
 
-<main class="main" role="main">
-    <div class="container">
+<main class="main dark:bg-gray-800 bg-gray-100" role="main">
+	<div class="container max-w-6xl mx-auto">
 
-        <?php while ( have_posts() ) : the_post(); ?>
+		<?php while ( have_posts() ) :
+			the_post(); ?>
 
-            <article <?php post_class(); ?>>
+			<article <?php post_class(); ?>>
 
-                <header role="heading">
-                    <h1 class="post__title"><?php the_title(); ?></h1>
-                </header>
+				<header role="heading">
+					<h1 class="post__title"><?php the_title(); ?></h1>
+				</header>
 
-                <?php the_content(); ?>
+				<?php the_content(); ?>
 
-            </article>
+			</article>
 
-        <?php endwhile; ?>
+		<?php endwhile; ?>
 
-    </div>
+	</div>
 </main>
 
 <?php get_footer(); ?>

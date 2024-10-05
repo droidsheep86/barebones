@@ -1,22 +1,31 @@
 <?php get_header(); ?>
 
-<main class="main" role="main">
-    <div class="container">
+<main class="main dark:bg-gray-800 bg-gray-100" role="main">
+	<div class="container max-w-6xl mx-auto">
 
-        <h1 class="text-2xl">Welcome to Barebones</h1>
+		<?php
+		if ( have_posts() ) :
+			while ( have_posts() ) :
+				the_post(); ?>
 
-        <div class="row">
-            <div class="col col--lg-12 col--md-12 col--sm-12 col--xs-12">
-                <h2>Base Font / <span class="font-alt">Alternate Font</span></h2>
-                <p class="text-xl">Text XL</p>
-                <p class="text-lg">Text LG</p>
-                <p class="text-md">Text MD</p>
-                <p class="text-sm">Text SM</p>
-                <p class="text-xs">Text XS</p>
-            </div>          
-        </div>
+				<article <?php post_class(); ?>>
 
-    </div>
+					<header class="post__header" role="heading">
+						<h1 class="post__title"><?php the_title(); ?></h1>
+					</header>
+
+					<?php the_excerpt(); ?>
+
+
+				</article>
+
+			<?php endwhile;
+
+		endif;
+		?>
+
+
+	</div>
 </main>
 
 <?php get_footer(); ?>

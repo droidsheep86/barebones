@@ -127,19 +127,19 @@ function add_gtag_to_head ()
     $tracking_code = 'UA-*********-1';
 
     ?>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $tracking_code; ?>"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $tracking_code; ?>"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-function gtag() {
-	dataLayer.push(arguments);
-}
-gtag('js', new Date());
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
 
-gtag('config', '<?php echo $tracking_code; ?>');
-</script>
-<?php
+        gtag('config', '<?php echo $tracking_code; ?>');
+    </script>
+    <?php
 }
 
 add_action( 'wp_head', 'add_gtag_to_head' );
@@ -346,3 +346,12 @@ function front_page_on_pages_menu ()
 }
 
 add_action( 'admin_menu', 'front_page_on_pages_menu' );
+function add_menu_link_class ( $atts, $item, $args )
+{
+    if ( property_exists( $args, 'link_class' ) )
+    {
+        $atts['class'] = $args->link_class;
+    }
+    return $atts;
+}
+add_filter( 'nav_menu_link_attributes', 'add_menu_link_class', 1, 3 );
