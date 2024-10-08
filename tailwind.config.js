@@ -6,6 +6,7 @@ module.exports = {
     './page.php',
     './footer.php',
     './functions.php',
+    './front-page.php',
     './template-parts/**/*.php',
     './assets/js/**/*.js',
     './assets/styles/**/*.scss'

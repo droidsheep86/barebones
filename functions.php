@@ -120,19 +120,19 @@ function add_gtag_to_head ()
     $tracking_code = 'UA-*********-1';
 
     ?>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $tracking_code; ?>"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $tracking_code; ?>"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
+function gtag() {
+	dataLayer.push(arguments);
+}
+gtag('js', new Date());
 
-        gtag('config', '<?php echo $tracking_code; ?>');
-    </script>
-    <?php
+gtag('config', '<?php echo $tracking_code; ?>');
+</script>
+<?php
 }
 
 add_action( 'wp_head', 'add_gtag_to_head' );
@@ -401,7 +401,7 @@ function akordi_views ( $id )
     {
         if ( function_exists( 'wpp_get_views' ) )
         {
-            wpp_get_views( $id );
+            return wpp_get_views( $id );
 
         }
     }

@@ -13,46 +13,44 @@ mix.js('assets/scripts/scripts.js', 'js')
 // Enable Browsersync for live reload
 mix.browserSync({
     proxy: 'https://akordi.local',
-    host: 'akordi.local',
+    // host: '127.0.0.1',
     open: false,
     https: true,
-    port: 3002, // Change to another port for the main proxy
+    port: 3002,
     ui: {
-        port: 3003, // Change UI port to avoid conflicts
+        port: 3003,
     },
     files: [
         'header.php',
         'single.php',
         'index.php',
         'page.php',
+        'front-page.php',
         'footer.php',
         'functions.php',
         'template-parts/**/*.php',
         'assets/js/**/*.js',
         'assets/styles/**/*.scss',
     ],
-    watchOptions: {
-        usePolling: true, // Necessary for live reload to work in Docker environments
-    },
 });
 
 
-mix.webpackConfig({
-    plugins: [
-        new BrowserSyncPlugin({
-            proxy: 'https://akordi.local',
-            files: [
-                './*.php',
-                './template-parts/**/*.php',
-                './assets/js/**/*.js',
-                './assets/styles/**/*.scss'
-            ],
-            notify: false,
-            open: false,
-            https: true, // Ensure Browsersync is using SSL
-        })
-    ]
-});
+// mix.webpackConfig({
+//     plugins: [
+//         new BrowserSyncPlugin({
+//             proxy: 'https://akordi.local',
+//             files: [
+//                 './*.php',
+//                 './template-parts/**/*.php',
+//                 './assets/js/**/*.js',
+//                 './assets/styles/**/*.scss'
+//             ],
+//             notify: false,
+//             open: false,
+//             https: true, // Ensure Browsersync is using SSL
+//         })
+//     ]
+// });
 
 // Disable notifications
 mix.disableNotifications();

@@ -50,7 +50,9 @@ get_header();
 							<?php echo akordi_get_artists(); ?>
 						</td>
 						<td class="chord-view">
-							<?php akordi_views( the_id() ); ?>
+							<?php echo akordi_views( $post->ID );
+							do_action( 'qm/debug', $post->ID );
+							?>
 						</td>
 						<?php if ( current_user_can( 'administrator' ) ) : ?>
 							<td class="chord-edit">
