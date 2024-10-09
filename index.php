@@ -16,8 +16,10 @@ get_header();
 			<caption>
 				<?php if ( is_archive() && get_the_archive_title() ) : ?>
 				<!-- Display archive title and description -->
-				<?php echo get_the_archive_title(); ?>
-				<div class="archive-description">
+				<h1 class="text-3xl font-extrabold">
+					<?php echo get_the_archive_title(); ?>
+				</h1>
+				<div class=" archive-description">
 					<?php echo get_the_archive_description(); ?>
 				</div>
 				<?php endif; ?>
@@ -36,7 +38,7 @@ get_header();
 			<tbody>
 				<?php if ( have_posts() ) : ?>
 				<?php while ( have_posts() ) :
-					the_post(); ?>
+						the_post(); ?>
 				<?php get_template_part( 'template-parts/content', 'chord-row' ); ?>
 				<?php endwhile; ?>
 				<?php else : ?>

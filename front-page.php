@@ -41,13 +41,21 @@ get_header(); ?>
 	<div class="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 lg:px-6">
 		<div class="max-w-screen-md mb-8 lg:mb-12">
 			<h2 class="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-				<?php esc_html_e( 'Пушти душа, не се слуша', 'your-textdomain' ); ?>
+				<?php esc_html_e( 'Пушти душа, нек се слуша', 'akordi' ); ?>
 			</h2>
 			<p class="text-gray-500 sm:text-xl dark:text-gray-400">
-				<?php esc_html_e( 'Избери од нашата богата архива', 'your-textdomain' ); ?>
+				<?php esc_html_e( 'Избери од нашата богата архива', 'akordi' ); ?>
 			</p>
 		</div>
 		<?php get_template_part( 'template-parts/content', 'tags' ); ?>
+	</div>
+</section>
+
+
+<!-- Popular Posts Section -->
+<section class="bg-gray-50 dark:bg-gray-800">
+	<div class="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 lg:px-6">
+		<?php get_template_part( 'template-parts/content', 'chord-card' ); ?>
 	</div>
 </section>
 
@@ -58,11 +66,5 @@ get_header(); ?>
 	</div>
 </section>
 
-<!-- Popular Posts Section -->
-<section class="bg-gray-50 dark:bg-gray-800">
-	<div class="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 lg:px-6">
-		<?php get_template_part( 'template-parts/content', 'chord-card' ); ?>
-	</div>
-</section>
 
 <?php get_footer(); ?>

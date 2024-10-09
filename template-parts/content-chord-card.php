@@ -17,13 +17,13 @@ $top_viewed_posts = $wpdb->get_results( "
 // Step 2: Loop through the IDs to display post titles and excerpts
 if ( ! empty( $top_viewed_posts ) ) :
 	?>
-	<div class="popular-posts-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+	<div class="popular-posts-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 shadow-md">
 		<?php foreach ( $top_viewed_posts as $post ) :
 			$post_id     = $post->ID;
 			$post_object = get_post( $post_id );
 			if ( $post_object ) :
 				?>
-				<div class="post-item dark:bg-gray-800 bg-gray-300 p-10 relative">
+				<div class="post-item dark:bg-gray-900 bg-gray-300 p-10 relative">
 					<p class="absolute top-2 right-2 bg-green-600 p-1"><?php akordi_views( $post->ID ); ?></p>
 					<h2 class="post-title text-xl mb-5">
 						<a href="<?php echo esc_url( get_permalink( $post_id ) ); ?>">
@@ -39,5 +39,5 @@ if ( ! empty( $top_viewed_posts ) ) :
 		endforeach; ?>
 	</div>
 <?php else : ?>
-	<p><?php esc_html_e( 'No top viewed posts available.', 'your-textdomain' ); ?></p>
+	<p><?php esc_html_e( 'No top viewed posts available.', 'akordi' ); ?></p>
 <?php endif; ?>

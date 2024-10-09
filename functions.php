@@ -1,5 +1,7 @@
 <?php
 
+// Include additional template tags
+require get_template_directory() . '/includes/template-tags.php';
 /**
  * Add support for useful features in the Akordi theme
  */
@@ -91,18 +93,18 @@ function akordi_add_gtag_to_head ()
     // Google Analytics
     $tracking_code = 'UA-*********-1';
     ?>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $tracking_code; ?>"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $tracking_code; ?>"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-function gtag() {
-	dataLayer.push(arguments);
-}
-gtag('js', new Date());
-gtag('config', '<?php echo $tracking_code; ?>');
-</script>
-<?php
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', '<?php echo $tracking_code; ?>');
+    </script>
+    <?php
 }
 add_action( 'wp_head', 'akordi_add_gtag_to_head' );
 
@@ -206,5 +208,31 @@ function akordi_add_category_to_search_results ( $query )
 }
 add_action( 'pre_get_posts', 'akordi_add_category_to_search_results' );
 
-// Include additional template tags
-require get_template_directory() . '/includes/template-tags.php';
+/**
+ * Remove archive labels.
+ * 
+ * @param  string $title Current archive title to be displayed.
+ * @return string        Modified archive title to be displayed.
+ */
+function my_theme_archive_title ( $title )
+{
+    if ( is_category() )
+    {
+        $title = single_cat_title( '', FALSE );
+    } elseif ( is_tag() )
+    {
+        $title = single_tag_title( '', FALSE );
+    } elseif ( is_author() )
+    {
+        $title = '<span class="vcard">' . get_the_author() . '</span>';
+    } elseif ( is_post_type_archive() )
+    {
+        $title = post_type_archive_title( '', FALSE );
+    } elseif ( is_tax() )
+    {
+        $title = single_term_title( '', FALSE );
+    }
+
+    return $title;
+}
+add_filter( 'get_the_archive_title', 'my_theme_archive_title' );
