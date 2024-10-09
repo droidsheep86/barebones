@@ -120,19 +120,19 @@ function add_gtag_to_head ()
     $tracking_code = 'UA-*********-1';
 
     ?>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $tracking_code; ?>"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $tracking_code; ?>"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
 
-function gtag() {
-	dataLayer.push(arguments);
-}
-gtag('js', new Date());
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
 
-gtag('config', '<?php echo $tracking_code; ?>');
-</script>
-<?php
+        gtag('config', '<?php echo $tracking_code; ?>');
+    </script>
+    <?php
 }
 
 add_action( 'wp_head', 'add_gtag_to_head' );
@@ -397,14 +397,13 @@ add_action( 'pre_get_posts', 'akordi_add_category_to_search_results' );
 
 function akordi_views ( $id )
 {
-    if ( user_can( get_current_user_id(), 'administrator' ) )
-    {
-        if ( function_exists( 'wpp_get_views' ) )
-        {
-            return wpp_get_views( $id );
 
-        }
+    if ( function_exists( 'wpp_get_views' ) )
+    {
+        return wpp_get_views( $id );
+
     }
 }
+
 
 require get_template_directory() . '/includes/template-tags.php';

@@ -28,7 +28,8 @@
 			}
 
 			.chord-genres,
-			.chord-artists {
+			.chord-artists,
+			.chord-view {
 				@apply px-6 py-4;
 			}
 
@@ -44,6 +45,9 @@
 				@apply px-6 py-4 text-center;
 			}
 
+			&:hover {
+				@apply dark:bg-gray-700 bg-gray-200;
+			}
 
 		}
 	}

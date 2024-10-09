@@ -14,11 +14,11 @@ get_header();
 	<table class="chords-table ">
 		<caption>
 			<?php if ( is_archive() && get_the_archive_title() ) : ?>
-				<!-- Display archive title and description -->
-				<?php echo get_the_archive_title(); ?>
-				<div class="archive-description">
-					<?php echo get_the_archive_description(); ?>
-				</div>
+			<!-- Display archive title and description -->
+			<?php echo get_the_archive_title(); ?>
+			<div class="archive-description">
+				<?php echo get_the_archive_description(); ?>
+			</div>
 			<?php endif; ?>
 		</caption>
 		<thead>
@@ -37,33 +37,34 @@ get_header();
 				while ( have_posts() ) :
 					the_post(); ?>
 
-					<tr id="post-<?php the_ID(); ?>" class="chord-row">
-						<th scope="row" class="chord-title">
-							<a href="<?php echo esc_url( get_permalink() ); ?>">
-								<?php echo esc_html( get_the_title() ); ?>
-							</a>
-						</th>
-						<td class="chord-genres">
-							<?php echo akordi_get_genres(); ?>
-						</td>
-						<td class="chord-artists">
-							<?php echo akordi_get_artists(); ?>
-						</td>
-						<td class="chord-view">
-							<?php echo akordi_views( $post->ID );
-							do_action( 'qm/debug', $post->ID );
-							?>
-						</td>
-						<?php if ( current_user_can( 'administrator' ) ) : ?>
-							<td class="chord-edit">
-								<a href="<?php echo esc_url( get_edit_post_link() ); ?>" class="edit-link">Edit</a>
-							</td>
-						<?php endif; ?>
-					</tr>
-				<?php endwhile; else : ?>
-				<tr>
-					<td colspan="4" class="no-chords">Тука нема акорди. Уживај во тишината...</td>
-				</tr>
+			<tr id="post-<?php the_ID(); ?>" class="chord-row">
+				<th scope="row" class="chord-title">
+					<a href="<?php echo esc_url( get_permalink() ); ?>">
+						<?php echo esc_html( get_the_title() ); ?>
+					</a>
+				</th>
+				<td class="chord-genres">
+					<?php echo akordi_get_genres(); ?>
+				</td>
+				<td class="chord-artists">
+					<?php echo akordi_get_artists(); ?>
+				</td>
+				<td class="chord-view">
+					<?php echo akordi_views( $post->ID );?>
+				</td>
+				<?php if ( current_user_can( 'administrator' ) ) : ?>
+				<td class="chord-edit">
+					<a href="<?php echo esc_url( get_edit_post_link() ); ?>" class="edit-link">Edit</a>
+				</td>
+				<?php else : ?>
+				<td class="chord-edit"></td>
+				<?php endif; ?>
+
+			</tr>
+			<?php endwhile; else : ?>
+			<tr>
+				<td colspan="4" class="no-chords">Тука нема акорди. Уживај во тишината...</td>
+			</tr>
 			<?php endif; ?>
 		</tbody>
 	</table>
