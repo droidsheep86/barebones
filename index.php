@@ -11,63 +11,44 @@ get_header();
 ?>
 
 <main id="primary" class="index-main">
-	<table class="chords-table ">
-		<caption>
-			<?php if ( is_archive() && get_the_archive_title() ) : ?>
-			<!-- Display archive title and description -->
-			<?php echo get_the_archive_title(); ?>
-			<div class="archive-description">
-				<?php echo get_the_archive_description(); ?>
-			</div>
-			<?php endif; ?>
-		</caption>
-		<thead>
-			<tr>
-				<th scope="col">Песна</th>
-				<th scope="col">Жанр</th>
-				<th scope="col">Артист</th>
-				<th scope="col">Прегледана</th>
-				<th scope="col">
-					<span class="sr-only">Измени</span>
-				</th>
-			</tr>
-		</thead>
-		<tbody>
-			<?php if ( have_posts() ) :
-				while ( have_posts() ) :
-					the_post(); ?>
-
-			<tr id="post-<?php the_ID(); ?>" class="chord-row">
-				<th scope="row" class="chord-title">
-					<a href="<?php echo esc_url( get_permalink() ); ?>">
-						<?php echo esc_html( get_the_title() ); ?>
-					</a>
-				</th>
-				<td class="chord-genres">
-					<?php echo akordi_get_genres(); ?>
-				</td>
-				<td class="chord-artists">
-					<?php echo akordi_get_artists(); ?>
-				</td>
-				<td class="chord-view">
-					<?php echo akordi_views( $post->ID );?>
-				</td>
-				<?php if ( current_user_can( 'administrator' ) ) : ?>
-				<td class="chord-edit">
-					<a href="<?php echo esc_url( get_edit_post_link() ); ?>" class="edit-link">Edit</a>
-				</td>
-				<?php else : ?>
-				<td class="chord-edit"></td>
+	<div class="md:gap-8 md:grid md:grid-cols-4">
+		<table class="col-span-3 chords-table">
+			<caption>
+				<?php if ( is_archive() && get_the_archive_title() ) : ?>
+				<!-- Display archive title and description -->
+				<?php echo get_the_archive_title(); ?>
+				<div class="archive-description">
+					<?php echo get_the_archive_description(); ?>
+				</div>
 				<?php endif; ?>
+			</caption>
+			<thead>
+				<tr>
+					<th scope="col"><?php esc_html_e( 'Песна', 'akordi' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Жанр', 'akordi' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Артист', 'akordi' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Прегледана', 'akordi' ); ?></th>
+					<th scope="col">
+						<span class="sr-only"><?php esc_html_e( 'Измени', 'akordi' ); ?></span>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php if ( have_posts() ) : ?>
+				<?php while ( have_posts() ) :
+					the_post(); ?>
+				<?php get_template_part( 'template-parts/content', 'chord-row' ); ?>
+				<?php endwhile; ?>
+				<?php else : ?>
+				<tr>
+					<td colspan="5" class="no-chords"><?php esc_html_e( 'Тука нема акорди. Уживај во тишината...', 'akordi' ); ?></td>
+				</tr>
+				<?php endif; ?>
+			</tbody>
+		</table>
+		<?php get_template_part( 'sidebar', 'archive' ); ?>
 
-			</tr>
-			<?php endwhile; else : ?>
-			<tr>
-				<td colspan="4" class="no-chords">Тука нема акорди. Уживај во тишината...</td>
-			</tr>
-			<?php endif; ?>
-		</tbody>
-	</table>
+	</div>
 	<div class="pagination mt-4">
 		<?php
 		// Display pagination links

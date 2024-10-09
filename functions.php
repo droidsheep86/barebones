@@ -1,12 +1,10 @@
 <?php
 
 /**
- * Add support for useful stuff
+ * Add support for useful features in the Akordi theme
  */
-
 if ( function_exists( 'add_theme_support' ) )
 {
-
     // Add support for document title tag
     add_theme_support( 'title-tag' );
 
@@ -14,332 +12,139 @@ if ( function_exists( 'add_theme_support' ) )
     add_theme_support( 'post-thumbnails' );
     // add_image_size( 'custom-size', 700, 200, true );
 
-    // Add Support for post formats
-    // add_theme_support( 'post-formats', ['post'] );
-    // add_post_type_support( 'page', 'excerpt' );
-
     // Localisation Support
-    load_theme_textdomain( 'barebones', get_template_directory() . '/languages' );
+    load_theme_textdomain( 'akordi', get_template_directory() . '/languages' );
 }
 
-
 /**
- * Hide admin bar
+ * Remove unnecessary elements from wp_head and deregister styles
  */
-
-//  add_filter( 'show_admin_bar', '__return_false' );
-
-
-/**
- * Remove junk
- */
-
 remove_action( 'wp_head', 'rsd_link' );
 remove_action( 'wp_head', 'wlwmanifest_link' );
 remove_action( 'wp_head', 'wp_generator' );
 remove_action( 'wp_head', 'start_post_rel_link' );
 remove_action( 'wp_head', 'index_rel_link' );
 remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head' );
-remove_action( 'wp_head', 'wp_shortlink_wp_head', 10, 0 );
+remove_action( 'wp_head', 'wp_shortlink_wp_head', 10 );
 remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 remove_action( 'wp_print_styles', 'print_emoji_styles' );
 
+/**
+ * Disable Gutenberg editor
+ */
+add_filter( 'use_block_editor_for_post', '__return_false' );
+add_filter( 'use_block_editor_for_post_type', '__return_false', 10 );
+add_filter( 'use_widgets_block_editor', '__return_false' );
+
+/**
+ * Remove Gutenberg-related styles
+ */
+add_action( 'wp_enqueue_scripts', function ()
+{
+    wp_dequeue_style( 'wp-block-library' );
+    wp_dequeue_style( 'wp-block-library-theme' );
+    wp_dequeue_style( 'global-styles' );
+}, 100 );
 
 /**
  * Remove comments feed
  *
  * @return void
  */
-
-function barebones_post_comments_feed_link ()
+function akordi_remove_post_comments_feed_link ()
 {
     return;
 }
-
-add_filter( 'post_comments_feed_link', 'barebones_post_comments_feed_link' );
-
+add_filter( 'post_comments_feed_link', 'akordi_remove_post_comments_feed_link' );
 
 /**
- * Enqueue scripts
+ * Deregister unnecessary styles
+ *
+ * @return void
  */
-
-function barebones_enqueue_scripts ()
+function akordi_deregister_styles ()
 {
-    // wp_enqueue_style( 'fonts', '//fonts.googleapis.com/css?family=Font+Family' );
-    // wp_enqueue_style( 'icons', '//use.fontawesome.com/releases/v5.0.10/css/all.css' );
-    // wp_deregister_script( 'jquery' );
+    wp_dequeue_style( 'wp-block-library' );
+}
+add_action( 'wp_print_styles', 'akordi_deregister_styles', 100 );
+
+/**
+ * Enqueue theme scripts and styles
+ */
+function akordi_enqueue_scripts ()
+{
     wp_enqueue_style( 'styles', get_stylesheet_directory_uri() . '/style.css?' . filemtime( get_stylesheet_directory() . '/style.css' ) );
     wp_enqueue_script( 'scripts', get_stylesheet_directory_uri() . '/js/scripts.min.js?' . filemtime( get_stylesheet_directory() . '/js/scripts.min.js' ), [], NULL, TRUE );
 }
-
-add_action( 'wp_enqueue_scripts', 'barebones_enqueue_scripts' );
-
+add_action( 'wp_enqueue_scripts', 'akordi_enqueue_scripts' );
 
 /**
- * Add async and defer attributes to enqueued scripts
+ * Add Google Analytics tracking code to head
  *
- * @param string $tag
- * @param string $handle
- * @param string $src
  * @return void
  */
-
-function defer_scripts ( $tag, $handle, $src )
+function akordi_add_gtag_to_head ()
 {
-
-    // The handles of the enqueued scripts we want to defer
-    $defer_scripts = [ 
-        'SCRIPT_ID',
-    ];
-
-    // Find scripts in array and defer
-    if ( in_array( $handle, $defer_scripts ) )
-    {
-        return '<script type="text/javascript" src="' . $src . '" defer="defer"></script>' . "\n";
-    }
-
-    return $tag;
-}
-
-add_filter( 'script_loader_tag', 'defer_scripts', 10, 3 );
-
-
-/**
- * Add custom scripts to head
- *
- * @return string
- */
-
-function add_gtag_to_head ()
-{
-
-    // Check is staging environment
+    // Check if it's a staging environment
     if ( strpos( get_bloginfo( 'url' ), '.test' ) !== FALSE ) return;
 
     // Google Analytics
     $tracking_code = 'UA-*********-1';
-
     ?>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $tracking_code; ?>"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $tracking_code; ?>"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-
-        gtag('config', '<?php echo $tracking_code; ?>');
-    </script>
-    <?php
+function gtag() {
+	dataLayer.push(arguments);
 }
-
-add_action( 'wp_head', 'add_gtag_to_head' );
-
-
+gtag('js', new Date());
+gtag('config', '<?php echo $tracking_code; ?>');
+</script>
+<?php
+}
+add_action( 'wp_head', 'akordi_add_gtag_to_head' );
 
 /**
- * Remove unnecessary scripts
+ * Register navigation menus
  *
  * @return void
  */
-
-function deregister_scripts ()
-{
-    wp_deregister_script( 'wp-embed' );
-}
-
-add_action( 'wp_footer', 'deregister_scripts' );
-
-
-/**
- * Remove unnecessary styles
- *
- * @return void
- */
-
-function deregister_styles ()
-{
-    wp_dequeue_style( 'wp-block-library' );
-}
-
-add_action( 'wp_print_styles', 'deregister_styles', 100 );
-
-
-/**
- * Register nav menus
- *
- * @return void
- */
-
-function barebones_register_nav_menus ()
+function akordi_register_nav_menus ()
 {
     register_nav_menus( [ 
         'header' => 'Header',
         'footer' => 'Footer',
     ] );
 }
-
-add_action( 'after_setup_theme', 'barebones_register_nav_menus', 0 );
-
+add_action( 'after_setup_theme', 'akordi_register_nav_menus', 0 );
 
 /**
- * Nav menu args
+ * Modify nav menu arguments
  *
- * @param array $args
- * @return void
+ * @param array $args Navigation menu arguments.
+ * @return array Modified navigation menu arguments.
  */
-
-function barebones_nav_menu_args ( $args )
+function akordi_nav_menu_args ( $args )
 {
     $args['container']       = 'ul';
     $args['container_class'] = FALSE;
     $args['menu_id']         = FALSE;
     $args['items_wrap']      = '<ul class="%2$s">%3$s</ul>';
-
     return $args;
 }
-
-add_filter( 'wp_nav_menu_args', 'barebones_nav_menu_args' );
-
+add_filter( 'wp_nav_menu_args', 'akordi_nav_menu_args' );
 
 /**
- * Button Shortcode
+ * Add class to nav menu links
  *
- * @param array $atts
- * @param string $content
- * @return void
+ * @param array  $atts Attributes for the anchor element.
+ * @param object $item The current menu item.
+ * @param object $args An array of wp_nav_menu() arguments.
+ * @return array Modified attributes for the anchor element.
  */
-
-function barebones_button_shortcode ( $atts, $content = NULL )
-{
-    $atts['class']  = isset( $atts['class'] ) ? $atts['class'] : 'btn';
-    $atts['target'] = isset( $atts['target'] ) ? $atts['target'] : '_self';
-    return '<a class="' . $atts['class'] . '" href="' . $atts['link'] . '" target="' . $atts['target'] . '">' . $content . '</a>';
-}
-
-add_shortcode( 'button', 'barebones_button_shortcode' );
-
-
-/**
- * TinyMCE
- *
- * @param array $buttons
- * @return void
- */
-
-function barebones_mce_buttons_2 ( $buttons )
-{
-    array_unshift( $buttons, 'styleselect' );
-    $buttons[] = 'hr';
-
-    return $buttons;
-}
-
-add_filter( 'mce_buttons_2', 'barebones_mce_buttons_2' );
-
-
-/**
- * TinyMCE styling
- *
- * @param array $settings
- * @return void
- */
-
-function barebones_tiny_mce_before_init ( $settings )
-{
-    $style_formats = [ 
-        [ 
-            'title' => 'Text Sizes',
-            'items' => [ 
-                [ 
-                    'title'    => '2XL',
-                    'selector' => 'span, p',
-                    'classes'  => 'text-2xl',
-                ],
-                [ 
-                    'title'    => 'XL',
-                    'selector' => 'span, p',
-                    'classes'  => 'text-xl',
-                ],
-                [ 
-                    'title'    => 'LG',
-                    'selector' => 'span, p',
-                    'classes'  => 'text-lg',
-                ],
-                [ 
-                    'title'    => 'MD',
-                    'selector' => 'span, p',
-                    'classes'  => 'text-md',
-                ],
-                [ 
-                    'title'    => 'SM',
-                    'selector' => 'span, p',
-                    'classes'  => 'text-sm',
-                ],
-                [ 
-                    'title'    => 'XD',
-                    'selector' => 'span, p',
-                    'classes'  => 'text-xs',
-                ],
-            ],
-        ],
-    ];
-
-    $settings['style_formats']       = json_encode( $style_formats );
-    $settings['style_formats_merge'] = TRUE;
-
-    return $settings;
-}
-
-add_filter( 'tiny_mce_before_init', 'barebones_tiny_mce_before_init' );
-
-
-/**
- * Get post thumbnail url
- *
- * @param string $size
- * @param boolean $post_id
- * @param boolean $icon
- * @return void
- */
-
-function get_post_thumbnail_url ( $size = 'full', $post_id = FALSE, $icon = FALSE )
-{
-    if ( ! $post_id )
-    {
-        $post_id = get_the_ID();
-    }
-
-    $thumb_url_array = wp_get_attachment_image_src(
-        get_post_thumbnail_id( $post_id ),
-        $size,
-        $icon
-    );
-    return $thumb_url_array[0];
-}
-
-
-/**
- * Add Front Page edit link to admin Pages menu
- */
-
-function front_page_on_pages_menu ()
-{
-    global $submenu;
-    if ( get_option( 'page_on_front' ) )
-    {
-        $submenu['edit.php?post_type=page'][501] = array(
-            __( 'Front Page', 'barebones' ),
-            'manage_options',
-            get_edit_post_link( get_option( 'page_on_front' ) ),
-        );
-    }
-}
-
-add_action( 'admin_menu', 'front_page_on_pages_menu' );
-function add_menu_link_class ( $atts, $item, $args )
+function akordi_add_menu_link_class ( $atts, $item, $args )
 {
     if ( property_exists( $args, 'link_class' ) )
     {
@@ -347,63 +152,59 @@ function add_menu_link_class ( $atts, $item, $args )
     }
     return $atts;
 }
-add_filter( 'nav_menu_link_attributes', 'add_menu_link_class', 1, 3 );
-
-// Disable Gutenberg on the back end.
-add_filter( 'use_block_editor_for_post', '__return_false' );
-add_filter( 'use_block_editor_for_post_type', '__return_false', 10 );
-
-// Disable Gutenberg for widgets.
-add_filter( 'use_widgets_block_editor', '__return_false' );
-
-add_action( 'wp_enqueue_scripts', function ()
-{
-    // Remove CSS on the front end.
-    wp_dequeue_style( 'wp-block-library' );
-
-    // Remove Gutenberg theme.
-    wp_dequeue_style( 'wp-block-library-theme' );
-
-    // Remove inline global CSS on the front end.
-    wp_dequeue_style( 'global-styles' );
-}, 100 );
-
-
+add_filter( 'nav_menu_link_attributes', 'akordi_add_menu_link_class', 1, 3 );
 
 /**
- * If ?s matches category/band show only their posts
+ * Sidebar setup
+ */
+/**
+ * Register sidebars for archive and single pages
  *
- * @param object WP_Query $query
+ * @return void
+ */
+function akordi_register_sidebars ()
+{
+    register_sidebar( [ 
+        'name'          => __( 'Archive Sidebar', 'akordi' ),
+        'id'            => 'archive-sidebar',
+        'description'   => __( 'Sidebar for archive pages', 'akordi' ),
+        'before_widget' => '<div id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h2 class="widget-title">',
+        'after_title'   => '</h2>',
+    ] );
+
+    register_sidebar( [ 
+        'name'          => __( 'Single Page Sidebar', 'akordi' ),
+        'id'            => 'single-page-sidebar',
+        'description'   => __( 'Sidebar for single pages', 'akordi' ),
+        'before_widget' => '<div id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</div>',
+        'before_title'  => '<h2 class="widget-title">',
+        'after_title'   => '</h2>',
+    ] );
+}
+add_action( 'widgets_init', 'akordi_register_sidebars' );
+
+/**
+ * Modify search results to include category-specific posts
  *
+ * @param WP_Query $query The WP_Query instance (passed by reference).
  * @return void
  */
 function akordi_add_category_to_search_results ( $query )
 {
-    if ( ! is_admin() && $query->is_main_query() )
+    if ( ! is_admin() && $query->is_main_query() && $query->is_search )
     {
-        if ( $query->is_search )
+        $cat_id = get_cat_ID( get_search_query() );
+        if ( ! empty( $cat_id ) )
         {
-            $cat_id = get_cat_ID( get_search_query() );
-
-            if ( ! empty( $cat_id ) )
-            {
-                $query->set( 's', '' );
-                $query->set( 'cat', $cat_id );
-            }
+            $query->set( 's', '' );
+            $query->set( 'cat', $cat_id );
         }
     }
 }
 add_action( 'pre_get_posts', 'akordi_add_category_to_search_results' );
 
-function akordi_views ( $id )
-{
-
-    if ( function_exists( 'wpp_get_views' ) )
-    {
-        return wpp_get_views( $id );
-
-    }
-}
-
-
+// Include additional template tags
 require get_template_directory() . '/includes/template-tags.php';

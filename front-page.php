@@ -1,6 +1,13 @@
-<?php get_header(); ?>
+<?php
+/**
+ * The template for displaying index and archives
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ *
+ * @package akordi
+ */
 
-
+get_header(); ?>
 
 <!-- Hero Section -->
 <section class="bg-white dark:bg-gray-900">
@@ -29,12 +36,7 @@
 	</div>
 </section>
 
-<!-- Features Section -->
-<?php
-// Get all tags
-$tags = get_tags();
-?>
-
+<!-- Features Section (Tags) -->
 <section class="bg-gray-50 dark:bg-gray-800">
 	<div class="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 lg:px-6">
 		<div class="max-w-screen-md mb-8 lg:mb-12">
@@ -45,102 +47,22 @@ $tags = get_tags();
 				<?php esc_html_e( 'Избери од нашата богата архива', 'your-textdomain' ); ?>
 			</p>
 		</div>
-		<div class="space-y-8 md:grid md:grid-cols-4 md:gap-12 md:space-y-0 lg:grid-cols-4">
-			<?php if ( $tags ) : ?>
-				<?php foreach ( $tags as $tag ) : ?>
-					<div>
-						<div class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-100 lg:h-12 lg:w-12 dark:bg-blue-900">
-							<svg class="w-5 h-5 text-blue-600 lg:w-6 lg:h-6 dark:text-blue-400" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-								<path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z"></path>
-							</svg>
-						</div>
-						<h3 class="mb-2 text-xl font-bold dark:text-white">
-							<a href="<?php echo get_tag_link( $tag->term_id ); ?>" class="hover:underline">
-								<?php echo esc_html( $tag->name ); ?>
-							</a>
-						</h3>
-						<p class="text-gray-500 dark:text-gray-400">
-							<?php echo $tag->description; ?>
-						</p>
-					</div>
-				<?php endforeach; ?>
-			<?php else : ?>
-				<p><?php esc_html_e( 'No tags found', 'your-textdomain' ); ?></p>
-			<?php endif; ?>
-		</div>
+		<?php get_template_part( 'template-parts/content', 'tags' ); ?>
 	</div>
 </section>
-<!-- Authors -->
-<section class="container mx-auto my-8">
-	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-		<?php
-		// Fetch all categories
-		$categories = get_categories();
-		foreach ( $categories as $category ) : ?>
-			<div class="bg-white dark:bg-gray-800 shadow-md overflow-hidden px-4 py-1">
-				<a href=" <?php echo esc_url( get_category_link( $category->term_id ) ); ?>" class="text-lg font-semibold text-gray-300 hover:underline block">
-					<?php echo esc_html( $category->name ); ?>
-				</a>
 
-			</div>
-		<?php endforeach; ?>
+<!-- Categories Section -->
+<section class="bg-gray-50 dark:bg-gray-800">
+	<div class="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 lg:px-6">
+		<?php get_template_part( 'template-parts/content', 'categories' ); ?>
 	</div>
 </section>
-<section class="container mx-auto my-8">
 
-	<?php
-	// Include this within your index.php or other appropriate template file
-	
-	global $wpdb;
-
-	// Step 1: Create a custom query to get post IDs of top viewed posts
-	$table_name       = $wpdb->prefix . 'popularpostsdata'; // Adjust to match your table name
-	$top_viewed_posts = $wpdb->get_results( "
-    SELECT p.ID
-    FROM {$table_name} AS ppd
-    INNER JOIN {$wpdb->posts} AS p ON ppd.postid = p.ID
-    WHERE p.post_status = 'publish'
-    ORDER BY ppd.pageviews DESC
-    LIMIT 10
-" );
-
-	// Step 2: Loop through the IDs to display post titles and excerpts
-	if ( ! empty( $top_viewed_posts ) )
-	{
-		echo '	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">';
-		foreach ( $top_viewed_posts as $post )
-		{
-			$post_id     = $post->ID;
-			$post_object = get_post( $post_id );
-
-			if ( $post_object )
-			{
-				?>
-				<div class="post-item dark:bg-gray-800 bg-gray-300 p-10 relative">
-					<p class="absolute top-2 right-2 bg-green-600 p-1"><?php echo akordi_views( $post->ID ); ?></p>
-
-					<h2 class="post-title text-xl mb-5">
-						<a href="<?php echo esc_url( get_permalink( $post_id ) ); ?>">
-							<?php echo esc_html( get_the_title( $post_object ) ); ?>
-						</a>
-					</h2>
-					<div class="post-excerpt">
-						<?php echo wp_kses_post( get_the_excerpt( $post_object ) ); ?>
-					</div>
-				</div>
-				<?php
-			}
-		}
-		echo '</div>';
-	} else
-	{
-		echo '<p>No top viewed posts available.</p>';
-	}
-	?>
-
+<!-- Popular Posts Section -->
+<section class="bg-gray-50 dark:bg-gray-800">
+	<div class="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 lg:px-6">
+		<?php get_template_part( 'template-parts/content', 'chord-card' ); ?>
+	</div>
 </section>
-
-
-</main>
 
 <?php get_footer(); ?>
