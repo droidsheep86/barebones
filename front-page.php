@@ -36,7 +36,7 @@ get_header(); ?>
 	</div>
 </section>
 
-<!-- Features Section (Tags) -->
+<!-- Genres -->
 <section class="bg-gray-50 dark:bg-gray-800">
 	<div class="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 lg:px-6">
 		<div class="max-w-screen-md mb-8 lg:mb-12">
@@ -52,22 +52,8 @@ get_header(); ?>
 </section>
 
 
-<!-- Popular Posts Section -->
-<section class="bg-gray-50 dark:bg-gray-800">
-	<div class="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 lg:px-6">
-		<?php get_template_part( 'template-parts/content', 'chord-card' ); ?>
-	</div>
-</section>
-
-<!-- Categories Section -->
-<section class="bg-gray-50 dark:bg-gray-800">
-	<div class="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 lg:px-6">
-		<?php get_template_part( 'template-parts/content', 'categories' ); ?>
-	</div>
-</section>
-
-
-<section class="bg-gray-50 dark:bg-gray-800">
+<!-- Popular Posts -->
+<section class="bg-gray-50 dark:bg-gray-900">
 	<div class="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 lg:px-6">
 		<?php
 
@@ -93,37 +79,39 @@ get_header(); ?>
 	</div>
 </section>
 
-<section>
-	<?php
-	$popular_artist_ids = get_popular_artists();
+<!-- Popular Artists -->
+<section class="bg-gray-50 dark:bg-gray-800">
+	<div class="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 lg:px-6">
+		<?php
+		$popular_artist_ids = get_popular_artists();
 
 
-	if ( ! empty( $popular_artist_ids ) )
-	{
-		echo '<div class="popular-artists">';
-		echo '<h2>Most Popular Artists</h2>';
-		echo '<ul>';
-
-		foreach ( $popular_artist_ids as $artist_id )
+		if ( ! empty( $popular_artist_ids ) )
 		{
-			$artist = get_term( $artist_id, 'category' );
-			if ( $artist )
+			echo '<div class="popular-artists">';
+			echo '<h2 class=" text-4xl font-extrabold">Популарни артисти</h2>';
+			echo '<ul class="flex flex-wrap gap-8">';
+
+			foreach ( $popular_artist_ids as $artist_id )
 			{
-				$artist_link = get_term_link( $artist );
-				$artist_name = esc_html( $artist->name );
-				$view_count  = intval( get_term_meta( $artist->term_id, '_pageviews', TRUE ) );
-				echo '<li><a href="' . esc_url( $artist_link ) . '">' . $artist_name . ' (' . $view_count . ' views)</a></li>';
-				do_action( 'qm/debug', $artist_name );
+				$artist = get_term( $artist_id, 'category' );
+				if ( $artist )
+				{
+					$artist_link = get_term_link( $artist );
+					$artist_name = esc_html( $artist->name );
+					$view_count  = intval( get_term_meta( $artist->term_id, '_pageviews', TRUE ) );
+					echo '<li class="bg-green-800 px-2 py-1"><a href="' . esc_url( $artist_link ) . '">' . $artist_name . ' <span class="bg-white text-slate-900 text-xs p-1 ml-5">' . $view_count . '</span></a></li>';
+					do_action( 'qm/debug', $artist_name );
+				}
 			}
+
+			echo '</ul>';
+			echo '</div>';
+		} else
+		{
+			echo '<p>No popular artists found.</p>';
 		}
-
-		echo '</ul>';
-		echo '</div>';
-	} else
-	{
-		echo '<p>No popular artists found.</p>';
-	}
-	?>
-
+		?>
+	</div>
 </section>
 <?php get_footer(); ?>

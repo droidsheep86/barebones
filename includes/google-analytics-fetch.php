@@ -86,7 +86,7 @@ class Popular_Posts_Manager
 					'name' => 'screenPageViews',
 				] ),
 			] )
-			->setLimit( 50 );
+			->setLimit( 200 );
 
 		try
 		{
