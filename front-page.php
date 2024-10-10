@@ -67,4 +67,63 @@ get_header(); ?>
 </section>
 
 
+<section class="bg-gray-50 dark:bg-gray-800">
+	<div class="max-w-screen-xl px-4 py-8 mx-auto sm:py-12 lg:px-6">
+		<?php
+
+		$popular_posts_query = get_popular_posts_query( [ 
+			'posts_per_page' => 20,
+		] );
+
+		if ( $popular_posts_query->have_posts() )
+		{
+			echo '<div class="popular-posts-section grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 shadow-md">';
+			while ( $popular_posts_query->have_posts() )
+			{
+				$popular_posts_query->the_post();
+				do_action( 'qm/debug', get_the_title() );
+
+				get_template_part( 'template-parts/content', 'chord-card' );
+			}
+
+			wp_reset_postdata();
+			echo '</div>';
+		}
+		?>
+	</div>
+</section>
+
+<section>
+	<?php
+	$popular_artist_ids = get_popular_artists();
+
+
+	if ( ! empty( $popular_artist_ids ) )
+	{
+		echo '<div class="popular-artists">';
+		echo '<h2>Most Popular Artists</h2>';
+		echo '<ul>';
+
+		foreach ( $popular_artist_ids as $artist_id )
+		{
+			$artist = get_term( $artist_id, 'category' );
+			if ( $artist )
+			{
+				$artist_link = get_term_link( $artist );
+				$artist_name = esc_html( $artist->name );
+				$view_count  = intval( get_term_meta( $artist->term_id, '_pageviews', TRUE ) );
+				echo '<li><a href="' . esc_url( $artist_link ) . '">' . $artist_name . ' (' . $view_count . ' views)</a></li>';
+				do_action( 'qm/debug', $artist_name );
+			}
+		}
+
+		echo '</ul>';
+		echo '</div>';
+	} else
+	{
+		echo '<p>No popular artists found.</p>';
+	}
+	?>
+
+</section>
 <?php get_footer(); ?>

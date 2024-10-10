@@ -7,3 +7,5 @@ package-lock.json
 *.map
 **/*.map
 yarn.lock
+vendor
+credentials.json

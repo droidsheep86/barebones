@@ -1,7 +1,11 @@
 <?php
 
+require_once 'vendor/autoload.php'; // Include the Composer autoload.php
+
 // Include additional template tags
 require get_template_directory() . '/includes/template-tags.php';
+require get_template_directory() . '/includes/google-analytics-fetch.php';
+
 /**
  * Add support for useful features in the Akordi theme
  */
