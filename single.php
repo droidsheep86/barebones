@@ -6,8 +6,7 @@
 		<article <?php post_class( 'md:gap-8 md:grid md:grid-cols-4' ); ?>>
 			<div class="col-span-3 mt-6 md:mt-0">
 				<p class="bg-green-700 text-white text-sm font-semibold inline-block mb-2 p-1.5 ">
-					<?php akordi_views( get_the_ID() );
-					?>
+					<?php echo get_post_meta( get_the_ID(), '_page_views', TRUE ); ?>
 				</p>
 				<div class="flex items-start mb-5">
 

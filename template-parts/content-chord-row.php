@@ -21,7 +21,7 @@ if ( ! isset( $post ) )
 		<?php akordi_get_artists(); ?>
 	</td>
 	<td class="chord-view">
-		<?php akordi_views( $post->ID ); ?>
+		<?php echo get_post_meta( $post->ID, '_page_views', TRUE ); ?>
 	</td>
 	<?php if ( current_user_can( 'administrator' ) ) : ?>
 		<td class="chord-edit">
