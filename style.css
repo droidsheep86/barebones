@@ -4,7 +4,7 @@ Theme URI: https://benchmark.co.uk/barebones
 Author: Benchmark Studios
 Author URI: https://benchmark.co.uk/
 Description: A lightweight and skeletal WordPress boilerplate theme for HTML5 and beyond
-Version: 1.2.3
+Version: 1.5.3
 License: MIT
 License URI: https://mit-license.org/
 Text Domain: barebones
@@ -1290,9 +1290,6 @@ video {
 .rounded {
   border-radius: 0.25rem;
 }
-.rounded-full {
-  border-radius: 9999px;
-}
 .rounded-lg {
   border-radius: 0.5rem;
 }
@@ -1334,10 +1331,6 @@ video {
 .bg-blue-700 {
   --tw-bg-opacity: 1;
   background-color: rgb(29 78 216 / var(--tw-bg-opacity));
-}
-.bg-gray-100 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
 }
 .bg-gray-300 {
   --tw-bg-opacity: 1;
@@ -1523,10 +1516,6 @@ video {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity));
 }
-.text-gray-600 {
-  --tw-text-opacity: 1;
-  color: rgb(75 85 99 / var(--tw-text-opacity));
-}
 .text-gray-700 {
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
@@ -1622,6 +1611,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(17 24 39 / var(--tw-bg-opacity));
 }
+.dark\:bg-slate-700:is(.dark *) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(51 65 85 / var(--tw-bg-opacity));
+}
 .dark\:text-blue-400:is(.dark *) {
   --tw-text-opacity: 1;
   color: rgb(96 165 250 / var(--tw-text-opacity));
@@ -1633,6 +1626,10 @@ video {
 .dark\:text-gray-100:is(.dark *) {
   --tw-text-opacity: 1;
   color: rgb(243 244 246 / var(--tw-text-opacity));
+}
+.dark\:text-gray-300:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity));
 }
 .dark\:text-gray-400:is(.dark *) {
   --tw-text-opacity: 1;
@@ -1754,18 +1751,6 @@ video {
   }
   .lg\:flex {
     display: flex;
-  }
-  .lg\:h-12 {
-    height: 3rem;
-  }
-  .lg\:h-6 {
-    height: 1.5rem;
-  }
-  .lg\:w-12 {
-    width: 3rem;
-  }
-  .lg\:w-6 {
-    width: 1.5rem;
   }
   .lg\:grid-cols-12 {
     grid-template-columns: repeat(12, minmax(0, 1fr));

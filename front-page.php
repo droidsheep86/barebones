@@ -44,7 +44,7 @@ get_header(); ?>
 				<?php esc_html_e( 'Пушти душа, нек се слуша', 'akordi' ); ?>
 			</h2>
 			<p class="text-gray-500 sm:text-xl dark:text-gray-400">
-				<?php esc_html_e( 'Избери од нашата богата архива', 'akordi' ); ?>
+				<?php esc_html_e( 'Избери жанр/категорија', 'akordi' ); ?>
 			</p>
 		</div>
 		<?php get_template_part( 'template-parts/content', 'tags' ); ?>

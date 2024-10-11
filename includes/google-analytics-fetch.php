@@ -11,44 +11,9 @@ use Google\Analytics\Data\V1beta\RunReportRequest;
  */
 class Popular_Posts_Manager
 {
-
-	/**
-	 * Retrieves cached popular posts.
-	 *
-	 * @return array
-	 */
-	public function get_cached_popular_posts ()
-	{
-		$popular_posts = get_transient( $this->cache_key_posts );
-
-		if ( empty( $popular_posts ) )
-		{
-			return [];
-		}
-
-		return wp_list_pluck( $popular_posts, 'post_id' );
-	}
-
-	/**
-	 * Retrieves cached popular artists.
-	 *
-	 * @return array
-	 */
-	public function get_cached_popular_artists ()
-	{
-		$popular_artists = get_transient( $this->cache_key_artists );
-
-		if ( empty( $popular_artists ) )
-		{
-			return [];
-		}
-
-		return wp_list_pluck( $popular_artists, 'term_id' );
-	}
 	private $property_id       = '345923490';
 	private $cache_key_posts   = 'cached_popular_posts';
 	private $cache_key_artists = 'cached_popular_artists';
-	private $cache_expiration  = HOUR_IN_SECONDS;
 	private $credentials_path;
 
 	public function __construct ()
@@ -57,6 +22,12 @@ class Popular_Posts_Manager
 
 		// Only add the action to cache popular posts.
 		add_action( 'popular_posts_cron', [ $this, 'cache_popular_data' ] );
+
+		// Check if options are empty, fetch data if needed.
+		if ( empty( get_option( $this->cache_key_posts ) ) || empty( get_option( $this->cache_key_artists ) ) )
+		{
+			$this->cache_popular_data();
+		}
 	}
 
 	/**
@@ -151,12 +122,48 @@ class Popular_Posts_Manager
 		$popular_data = $this->get_popular_data_from_google_analytics();
 		if ( ! empty( $popular_data['posts'] ) )
 		{
-			set_transient( $this->cache_key_posts, $popular_data['posts'], $this->cache_expiration );
+			update_option( $this->cache_key_posts, $popular_data['posts'], FALSE );
+			update_option( $this->cache_key_posts . '_last_updated', time(), FALSE );
 		}
 		if ( ! empty( $popular_data['artists'] ) )
 		{
-			set_transient( $this->cache_key_artists, $popular_data['artists'], $this->cache_expiration );
+			update_option( $this->cache_key_artists, $popular_data['artists'], FALSE );
+			update_option( $this->cache_key_artists . '_last_updated', time(), FALSE );
 		}
+	}
+
+	/**
+	 * Retrieves cached popular posts.
+	 *
+	 * @return array
+	 */
+	public function get_cached_popular_posts ()
+	{
+		$popular_posts = get_option( $this->cache_key_posts );
+
+		if ( empty( $popular_posts ) )
+		{
+			return [];
+		}
+
+		return $popular_posts;
+	}
+
+	/**
+	 * Retrieves cached popular artists.
+	 *
+	 * @return array
+	 */
+	public function get_cached_popular_artists ()
+	{
+		$popular_artists = get_option( $this->cache_key_artists );
+
+		if ( empty( $popular_artists ) )
+		{
+			return [];
+		}
+
+		return $popular_artists;
 	}
 
 	/**
@@ -189,12 +196,14 @@ $popular_posts_manager = new Popular_Posts_Manager();
 // Schedule cron when theme is activated.
 add_action( 'after_setup_theme', [ 'Popular_Posts_Manager', 'schedule_cron' ] );
 
-// Unschedule cron and delete transients when theme is switched or deactivated.
+// Unschedule cron and delete options when theme is switched or deactivated.
 add_action( 'switch_theme', function ()
 {
 	Popular_Posts_Manager::unschedule_cron();
-	delete_transient( 'cached_popular_posts' );
-	delete_transient( 'cached_popular_artists' );
+	delete_option( 'cached_popular_posts' );
+	delete_option( 'cached_popular_artists' );
+	delete_option( 'cached_popular_posts_last_updated' );
+	delete_option( 'cached_popular_artists_last_updated' );
 } );
 
 /**
@@ -203,16 +212,16 @@ add_action( 'switch_theme', function ()
 function get_popular_posts_query ( $args = [] )
 {
 	global $popular_posts_manager;
-	$popular_post_ids = $popular_posts_manager->get_cached_popular_posts();
+	$popular_posts = $popular_posts_manager->get_cached_popular_posts();
 
-	if ( empty( $popular_post_ids ) )
+	if ( empty( $popular_posts ) )
 	{
 		return new WP_Query( [ 'post__in' => [] ] );
 	}
 
 	$default_args = [ 
 		'post_type' => 'post',
-		'post__in'  => $popular_post_ids,
+		'post__in'  => wp_list_pluck( $popular_posts, 'post_id' ),
 		'orderby'   => 'post__in',
 	];
 
@@ -227,5 +236,12 @@ function get_popular_posts_query ( $args = [] )
 function get_popular_artists ()
 {
 	global $popular_posts_manager;
-	return $popular_posts_manager->get_cached_popular_artists();
+	$popular_artists = $popular_posts_manager->get_cached_popular_artists();
+
+	if ( empty( $popular_artists ) )
+	{
+		return [];
+	}
+
+	return wp_list_pluck( $popular_artists, 'term_id' );
 }
